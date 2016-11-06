@@ -56,7 +56,7 @@ void branch_in_wind() {
     while (!out) {
       color = pixels.Color(0,50,0);
       if (num_of_circles > 0 && (num_of_circles - circle < step_num)) {
-        led = base_led + step_num-(num_of_circles - circle);
+        led = base_led + step_num+(num_of_circles - circle);
       //  Serial.println(step_num);
 //        Serial.println(num_of_circles);
         //Serial.println(circle);
@@ -84,7 +84,7 @@ void branch_in_wind() {
 // light_led_in_circle
 // --------------------
 int light_led_in_circle (int led, int circle, uint32_t color) {
-  int index = circle * NUMPIXELSFIRSTLOOP + (DIFFBETWEENLOOPS*circle * circle/2) + led ;
+  int index = circle * NUMPIXELSFIRSTLOOP + (DIFFBETWEENLOOPS*circle * (circle-1)/2) + led ;
   //Serial.println(index);
   if (index < 0) {
     return 1;
