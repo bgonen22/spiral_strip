@@ -30,9 +30,9 @@ void setup() {
 }
 
 void loop() {
-//  first_loop_check();
+  first_loop_check();
 //  delay(delayval);
-  branch_in_wind();
+//  branch_in_wind();
 //  delay(delayval);
 
 }
@@ -57,10 +57,10 @@ void branch_in_wind() {
       color = pixels.Color(0,50,0);
       if (num_of_circles > 0 && (num_of_circles - circle < step_num)) {
         led = base_led + step_num+(num_of_circles - circle);
-      //  Serial.println(step_num);
-//        Serial.println(num_of_circles);
-        //Serial.println(circle);
-         //Serial.println("----------");
+        Serial.println(step_num);
+        Serial.println(num_of_circles);
+        Serial.println(circle);
+         Serial.println("----------");
         
       } else {
         led = base_led;      
@@ -86,7 +86,7 @@ void branch_in_wind() {
 int light_led_in_circle (int led, int circle, uint32_t color) {
   int index = circle * NUMPIXELSFIRSTLOOP + (DIFFBETWEENLOOPS*circle * (circle-1)/2) + led ;
   //Serial.println(index);
-  if (index < 0) {
+  if (index > NUMPIXELS) {
     return 1;
   }
   pixels.setPixelColor(index,color);
@@ -105,7 +105,7 @@ void first_loop_check () {
   while (1) {
     color = getColor(c,50);
     for (int i = start_loop; i<= end_loop; ++i) {
-      if (end_loop > NUMPIXELS ) {
+      if (start_loop > NUMPIXELS ) {
         pixels.show();
         return;
       }
