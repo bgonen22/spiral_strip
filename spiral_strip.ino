@@ -84,7 +84,7 @@ void branch_in_wind() {
 // light_led_in_circle
 // --------------------
 int light_led_in_circle (int led, int circle, uint32_t color) {
-  int index = NUMPIXELS - (circle * NUMPIXELSFIRSTLOOP + (DIFFBETWEENLOOPS*circle * circle/2) + led +1);
+  int index = circle * NUMPIXELSFIRSTLOOP + (DIFFBETWEENLOOPS*circle * circle/2) + led ;
   //Serial.println(index);
   if (index < 0) {
     return 1;
@@ -105,11 +105,11 @@ void first_loop_check () {
   while (1) {
     color = getColor(c,50);
     for (int i = start_loop; i<= end_loop; ++i) {
-      if (NUMPIXELS-i < 0 ) {
+      if (end_loop > NUMPIXELS ) {
         pixels.show();
         return;
       }
-      pixels.setPixelColor(NUMPIXELS-i,color);
+      pixels.setPixelColor(i,color);
     }
     //Serial.print("start_loop ");
 //    Serial.print(start_loop);
