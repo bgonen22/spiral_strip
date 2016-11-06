@@ -10,6 +10,9 @@
 // How many NeoPixels are in the first loop
 #define NUMPIXELSFIRSTLOOP      15
 
+// the diff btween two loops
+#define DIFFBETWEENLOOPS      9
+
 // delay between iterations
 int delayval = 100; // delay in milisec
 
@@ -81,7 +84,7 @@ void branch_in_wind() {
 // light_led_in_circle
 // --------------------
 int light_led_in_circle (int led, int circle, uint32_t color) {
-  int index = NUMPIXELS - (circle * NUMPIXELSFIRSTLOOP + (circle-1) * circle/2 + led +1);
+  int index = NUMPIXELS - (circle * NUMPIXELSFIRSTLOOP + (DIFFBETWEENLOOPS*circle * circle/2) + led +1);
   //Serial.println(index);
   if (index < 0) {
     return 1;
