@@ -30,9 +30,9 @@ void setup() {
 }
 
 void loop() {
-  first_loop_check();
+  //first_loop_check();
 //  delay(delayval);
-//  branch_in_wind();
+  branch_in_wind();
 //  delay(delayval);
 
 }
@@ -57,10 +57,10 @@ void branch_in_wind() {
       color = pixels.Color(0,50,0);
       if (num_of_circles > 0 && (num_of_circles - circle < step_num)) {
         led = base_led + step_num+(num_of_circles - circle);
-        Serial.println(step_num);
-        Serial.println(num_of_circles);
-        Serial.println(circle);
-         Serial.println("----------");
+        //Serial.println(step_num);
+        //Serial.println(num_of_circles);
+        //Serial.println(circle);
+         //Serial.println("----------");
         
       } else {
         led = base_led;      
@@ -118,7 +118,7 @@ void first_loop_check () {
     diff = end_loop-start_loop;
     start_loop = end_loop+1;
     end_loop = end_loop + diff+2;
-    c= c+1%NUMOFCOLORS;    
+    c= (c+1)%NUMOFCOLORS;    
   }
   
   
