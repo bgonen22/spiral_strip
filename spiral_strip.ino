@@ -7,14 +7,12 @@
 // How many NeoPixels are attached to the Arduino?
 #define NUMPIXELS      60
 
-// How many NeoPixels are in the first loop
-#define NUMPIXELSFIRSTLOOP      15
-
-// the diff btween two loops
-#define DIFFBETWEENLOOPS      9
+// How many leds in each loop
+//int loops[] = {19,30,46,58,76,71};
+int loops[] = {12,18,30};
 
 // delay between iterations
-int delayval = 100; // delay in milisec
+int delayval = 50; // delay in milisec
 
 #define NUMOFCOLORS  3
 
@@ -23,106 +21,66 @@ int delayval = 100; // delay in milisec
 // example for more information on possible values.
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-
+int num_of_loops = sizeof(loops)/sizeof(int);
 void setup() {
   Serial.begin(9600);
-  pixels.begin(); // This initializes the NeoPixel library.
+  pixels.begin(); // This initializes the NeoPixel library.    
 }
 
 void loop() {
-  //first_loop_check();
-//  delay(delayval);
-  branch_in_wind();
-//  delay(delayval);
+//  first_loop_check();
+  venta();
 
 }
 
 // --------------------
 // branch_in_wind
 // --------------------
-void branch_in_wind() {
-  clearAll();
-  int out = 0;
-  int circle = 0;
-  uint32_t color;
-  int num_of_circles;
-  int led;
-  int base_led = 0;
-  int step_num;
+void venta() {
+  clearAll();  
+  int color;  
+  int current_led = 0;
+  int move_color = 0;
   while (1) {
-    circle = 0;    
-    out = 0;
-    clearAll();
-    while (!out) {
-      color = pixels.Color(0,50,0);
-      if (num_of_circles > 0 && (num_of_circles - circle < step_num)) {
-        led = base_led + step_num+(num_of_circles - circle);
-        //Serial.println(step_num);
-        //Serial.println(num_of_circles);
-        //Serial.println(circle);
-         //Serial.println("----------");
-        
-      } else {
-        led = base_led;      
-      }
-      //Serial.println(led);
-      out = light_led_in_circle(led,circle,color);
-      if (out) {
-        num_of_circles = circle;
-      }
-      circle++;      
+    current_led = 0;
+    for (int c = 0 ; c < num_of_loops ; ++c) {
+      for (int i = 0 ; i < loops[c] ; ++i) {      
+        int new_i = (i+move_color)% loops[c]; // for move the color by 1 each iteration
+        Serial.println(new_i);
+        color = new_i*NUMOFCOLORS/loops[c];        
+        pixels.setPixelColor(current_led,getColor(color,20));   
+        current_led += 1;
+      }               
     }
-    step_num++;
-    if (num_of_circles > 0 ) {
-      step_num = step_num  % num_of_circles;
-    }    
     pixels.show();   
     delay(delayval); 
+    move_color++;
   }
+  
+  
+  
 }
-// --------------------
-// light_led_in_circle
-// --------------------
-int light_led_in_circle (int led, int circle, uint32_t color) {
-  int index = circle * NUMPIXELSFIRSTLOOP + (DIFFBETWEENLOOPS*circle * (circle-1)/2) + led ;
-  //Serial.println(index);
-  if (index > NUMPIXELS) {
-    return 1;
-  }
-  pixels.setPixelColor(index,color);
-  return 0;
-}
+
 // --------------------
 // first_loop_check
 // --------------------
 void first_loop_check () {
   clearAll();
-  int start_loop = 1;
-  int end_loop= NUMPIXELSFIRSTLOOP;
-  int c = 0;
-  int diff;
-  uint32_t color;
-  while (1) {
-    color = getColor(c,50);
-    for (int i = start_loop; i<= end_loop; ++i) {
-      if (start_loop > NUMPIXELS ) {
-        pixels.show();
-        return;
-      }
-      pixels.setPixelColor(i,color);
-    }
-    //Serial.print("start_loop ");
-//    Serial.print(start_loop);
-    //Serial.print(" end_loop ");
-    //Serial.println(end_loop);
-    diff = end_loop-start_loop;
-    start_loop = end_loop+1;
-    end_loop = end_loop + diff+2;
-    c= (c+1)%NUMOFCOLORS;    
+  int c;
+  int l;
+  int color;
+  int current_led = 0;
+  for (int c = 0 ; c < num_of_loops ; ++c) {
+    color = (color +1)%NUMOFCOLORS;        
+    for (l = 0 ; l < loops[c] ; ++l) {            
+      pixels.setPixelColor(current_led,getColor(color,20));            
+      current_led += 1;      
+    }    
   }
-  
-  
+  pixels.show();
+  delay(delayval); 
 }
+
 //----------------------------
 //  clearAll
 //----------------------------
